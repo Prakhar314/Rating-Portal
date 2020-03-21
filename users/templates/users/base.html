@@ -9,11 +9,9 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{% static 'main.css'%}">
 
-    {% if title%}
-    <title>Rating Portal - {{title}}</title>
-    {% else %}
-    <title>Rating Portal</title>
-    {%endif%}
+    <title>
+        {% block title %}{% endblock %}
+    </title>
 </head>
 
 <body>

@@ -1,8 +1,12 @@
 {% extends "users/base.html" %}
+{% block title %}
+Rating Portal - Profile
+{% endblock title %}
 {% block content %}
 <div class="card-body">
     <h2>{{user.get_username}}</h2>
     <hr>
+    <a class="card-link" href="{% url 'change-pass' %}">Change Password</a>
 </div>
 
 {% endblock content %}
