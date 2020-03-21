@@ -1,0 +1,16 @@
+{% extends "users/base.html" %}
+{% block content %}
+<div class="card-body">
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset class='form-group'>
+            <legend class="border-bottom mb-4"><h3>Join Today</h3></legend>
+            {{ form.as_p }}
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-outline-primary" type="submit">Sign Up</button>
+            
+        </div>
+    </form>
+</div>
+{% endblock content %}
