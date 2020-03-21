@@ -1,0 +1,8 @@
+{% extends "users/base.html" %}
+{% block content %}
+<div class="card-body">
+    <h2>Logged out successfully!</h2>
+    <hr>
+    <a class="card-link" href="{%url 'login'%}"> Log in again?</a>
+</div>
+{% endblock content %}
