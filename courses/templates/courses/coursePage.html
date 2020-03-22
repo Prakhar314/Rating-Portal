@@ -9,10 +9,10 @@ Rating Portal - Course
     <h2>{{courseName}} - Reviews</h2>
     <hr class="hr-primary">
     {% for review in reviews %}
-    <div class="card m-1">
+    <div class="card m-1 mt-3">
         <div class="card-header">
             <div class="d-flex justify-content-between">
-                <h6>{{review.name}}</h6>
+                <h6>{{review.author.username}}</h6>
                 <h6 class="text-muted">{{review.dateAdded|naturaltime}}</h6>
             </div>
         </div>
@@ -21,9 +21,9 @@ Rating Portal - Course
                 <span class="text-secondary">
                     {{review.score}}
                 </span>
-                <span class="ml-5">
+                <p class="ml-5">
                     {{review.reviewContent}}
-                </span>
+                </p>
             </div>
         </div>
         <div class="card-footer text-right">
@@ -59,6 +59,15 @@ Rating Portal - Course
             <h3>Add your review!</h3>
         </div>
         <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <fieldset class='form-group'>
+                    {{ commentForm.as_p }}
+                </fieldset>
+                <div class="form-group">
+                    <button class="btn btn-outline-primary" type="submit">Submit</button> 
+                </div>
+            </form>
         </div>
     </div>
 </div>

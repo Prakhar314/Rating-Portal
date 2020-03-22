@@ -1,13 +1,28 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.apps import apps
 from django.http import Http404
+from review.forms import CommentForm
 
 def courseView(request,courseName):
     reviews,rating = recheckRatingsFor(courseName)
     courseList= getAllOf('courses')
+
     if courseName not in [c.courseName for c in courseList]:
         raise Http404('No such Course')
-    return render(request,'courses/coursePage.html',{'reviews':reviews,'courseName':courseName,'rating':rating})
+
+    new_comment = None
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=True)
+            new_comment.author = request.user
+            new_comment.courseName=courseName
+            new_comment.save()
+            return redirect('course',courseName=courseName)
+    else:
+        comment_form = CommentForm()
+
+    return render(request,'courses/coursePage.html',{'reviews':reviews,'courseName':courseName,'rating':rating,'commentForm':comment_form})
 
 def courseListView(request):
     recheckAllRatings()
