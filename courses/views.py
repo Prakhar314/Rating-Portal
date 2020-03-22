@@ -1,18 +1,21 @@
 from django.shortcuts import render
 from django.apps import apps
+from django.http import Http404
+
 def courseView(request,courseName):
     reviews,rating = recheckRatingsFor(courseName)
+    courseList= getAllOf('courses')
+    if courseName not in [c.courseName for c in courseList]:
+        raise Http404('No such Course')
     return render(request,'courses/coursePage.html',{'reviews':reviews,'courseName':courseName,'rating':rating})
 
 def courseListView(request):
     recheckAllRatings()
-    for r in apps.get_app_config('courses').get_models():
-        courseList = r.objects.all()
-    return render(request,'courses/courseList.html',{'list':list(courseList)})
+    courseList = getAllOf('courses')
+    return render(request,'courses/courseList.html',{'list':courseList})
 
 def recheckRatingsFor(courseName):
-    for r in apps.get_app_config('review').get_models():
-        reviews = r.objects.all()
+    reviews = getAllOf('review')
     reviews = list(filter(lambda x:x.courseName==courseName,reviews))
     if len(reviews)==0:
         return [],'Unrated'
@@ -20,10 +23,8 @@ def recheckRatingsFor(courseName):
     return reviews,rating
 
 def recheckAllRatings():
-    for r in apps.get_app_config('courses').get_models():
-        courseList = list(r.objects.all())
-    for r in apps.get_app_config('review').get_models():
-        reviews = list(r.objects.all())
+    courseList = getAllOf('courses')
+    reviews = getAllOf('review')
     results={}
     for review in reviews:
         try:
@@ -43,3 +44,7 @@ def recheckAllRatings():
         course.noOfReviews = result[1]
         course.save()
 
+def getAllOf(name):
+    for r in apps.get_app_config(name).get_models():
+        objects = list(r.objects.all())
+    return objects
