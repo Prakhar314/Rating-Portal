@@ -6,13 +6,18 @@ Rating Portal - Course
 
 {% block content %}
 <div class="card-body ">
-    <h2>{{courseName}} - Reviews</h2>
+    <div class="d-flex justify-content-between">
+        <h2>{{courseName}} - Reviews</h2>
+        <h2 class="text-muted">{{reviews|length}}</h2>
+    </div>
     <hr class="hr-primary">
     {% for review in reviews %}
     <div class="card m-1 mt-3">
         <div class="card-header">
             <div class="d-flex justify-content-between">
-                <h6>{{review.author.username}}</h6>
+                <a class="card-link text-dark" href="{%url 'profile' profileOwner=review.author.username%}">
+                    <h6>{{review.author.username}}</h6>
+                </a>
                 <h6 class="text-muted">{{review.dateAdded|naturaltime}}</h6>
             </div>
         </div>
@@ -27,7 +32,12 @@ Rating Portal - Course
             </div>
         </div>
         <div class="card-footer text-right">
+            {% if user.get_username == review.author.username %}
+            <a class="card-link text-black-50" href="{% url 'delete' reviewID=review.id type='from_course'%}">Delete</a>
+            {% else %}
             <a class="card-link text-black-50" href="#">Report</a>
+            {% endif %}
+
         </div>
     </div>
 
@@ -65,7 +75,17 @@ Rating Portal - Course
                     {{ commentForm.as_p }}
                 </fieldset>
                 <div class="form-group">
-                    <button class="btn btn-outline-primary" type="submit">Submit</button> 
+                    {% if user.is_authenticated %}
+                    <button class="btn btn-outline-primary" type="submit">Submit</button>
+                    {%else%}
+                    <div class="d-flex justify-content-between form-inline">
+                        <button type="button" class="btn btn-secondary btn-lg" disabled>Submit</button>
+                        <h6 class="text-muted">Not logged in.</h6>
+
+                    </div>
+
+                    {% endif %}
+
                 </div>
             </form>
         </div>
