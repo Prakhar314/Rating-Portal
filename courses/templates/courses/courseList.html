@@ -1,0 +1,32 @@
+{% extends "users/base.html" %}
+{% block title %}
+  Rating Portal - All Courses
+{% endblock title %}
+{% block content %}
+  <div class="card-body">
+      <h2>All Courses</h2>
+      <hr>
+      {% for course in list %}
+        <div class="card m-1">
+            <div class="card-header">
+                <div class="d-flex justify-content-between">
+                    <a href="{{course.courseName}}">
+                        {{course.courseName}}
+                    </a>
+                    <h6>
+                        {% if course.rating != -1 %}
+                          
+                        {{course.rating}}
+                        {%else%}
+                        Unrated
+                        {% endif %}
+                    </h6>
+                    <h6>
+                        {{course.noOfReviews}}
+                    </h6>
+                </div>
+            </div>
+        </div>
+      {% endfor %}
+  </div>
+{% endblock content %}
