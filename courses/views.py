@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect
+from django.contrib import messages
 from django.apps import apps
 from django.http import Http404
 from review.forms import CommentForm
@@ -18,6 +19,7 @@ def courseView(request,courseName):
             new_comment.author = request.user
             new_comment.courseName=courseName
             new_comment.save()
+            messages.success(request,'Review submitted')
             return redirect('course',courseName=courseName)
     else:
         comment_form = CommentForm()

@@ -1,12 +1,54 @@
 {% extends "users/base.html" %}
+{% load humanize %}
 {% block title %}
 Rating Portal - Profile
 {% endblock title %}
 {% block content %}
 <div class="card-body">
-    <h2>{{user.get_username}}</h2>
+    <h2>{{profileOwner.get_username}}</h2>
     <hr>
+    {% if user.get_username == profileOwner.get_username %}
     <a class="card-link" href="{% url 'change-pass' %}">Change Password</a>
+    <hr>
+    {% endif %}
+    <div class="d-flex justify-content-around">
+        <h2>Reviews</h2>
+        <h2 class="text-muted">{{profileOwner.reviews_written.all.count}}</h2>
+    </div>
+
+    <hr>
+    {% for review in profileOwner.reviews_written.all %}
+    <div class="card m-1 mt-3">
+        <div class="card-header">
+            <div class="d-flex justify-content-between">
+                <a class="card-link text-dark" href="{%url 'course' courseName=review.courseName%}">
+                    <h6>{{review.courseName}}</h6>
+                </a>
+                <h6 class="text-muted">{{review.dateAdded|naturaltime}}</h6>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <span class="text-secondary">
+                    {{review.score}}
+                </span>
+                <p class="ml-5">
+                    {{review.reviewContent}}
+                </p>
+            </div>
+        </div>
+        <div class="card-footer text-right">
+            {% if user.get_username == review.author.username %}
+            <a class="card-link text-black-50" href="{% url 'delete' reviewID=review.id type='from_profile'%}">Delete</a>
+            {% else %}
+            <a class="card-link text-black-50" href="#">Report</a>
+            {% endif %}
+        </div>
+    </div>
+
+    {%empty%}
+    <h5>No reviews yet.</h5>
+    {% endfor %}
 </div>
 
 {% endblock content %}

@@ -1,0 +1,40 @@
+{% extends "users/base.html" %}
+{%load humanize%}
+{% block content %}
+  <div class="card-body">
+      <h5>
+          Are you sure you want to delete this review?
+      </h5>
+      <div class="card m-1 mt-3">
+        <div class="card-header">
+            <div class="d-flex justify-content-between">
+                <a class="card-link text-dark" href="{%url 'course' courseName=review.courseName%}">
+                    <h6>{{review.courseName}}</h6>
+                </a>
+                <h6 class="text-muted">{{review.dateAdded|naturaltime}}</h6>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <span class="text-secondary">
+                    {{review.score}}
+                </span>
+                <p class="ml-5">
+                    {{review.reviewContent}}
+                </p>
+            </div>
+        </div>
+    </div>
+    <form  method="post" >
+        {% csrf_token %}
+        <div class="mx-auto">
+            <button type="submit" class="btn btn-danger">Yes</button>
+            {% if type == 'from_profile' %}
+            <a href="{%url 'profile' profileOwner=user.username%}" class="btn btn-success">No</a></div>
+            {%else%}
+            <a href="{%url 'course' courseName=review.courseName%}" class="btn btn-success">No</a></div>
+            {% endif %}
+    </form>
+    
+  </div>
+{% endblock content %}
