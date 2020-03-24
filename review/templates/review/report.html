@@ -1,0 +1,44 @@
+{% extends "users/base.html" %}
+{% load humanize %}
+{% block title %}
+Rating Portal -Report
+{% endblock title %}
+{% block content %}
+<div class="card-body">
+    <h2>Report Issue</h2>
+    <hr>
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between">
+                <a class="card-link text-dark" href="{%url 'course' courseName=review.courseName%}">
+                    <h6>{{review.courseName}}</h6>
+                </a>
+                <h6 class="text-muted">{{review.dateAdded|naturaltime}}</h6>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <span class="text-secondary">
+                    {{review.score}}
+                </span>
+                <p class="ml-5">
+                    {{review.reviewContent}}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h6>What is your issue?</h6>
+        </div>
+        <div class="card-body">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button type="submit">Submit</button>
+                <a href="#">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

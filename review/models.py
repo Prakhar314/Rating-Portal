@@ -8,3 +8,10 @@ class Review(models.Model):
     author = models.ForeignKey(User, on_delete= models.CASCADE,related_name='reviews_written',default=5)
     class Meta:
         ordering =['-dateAdded']
+
+class Report(models.Model):
+    reviewReported = models.ForeignKey(Review, on_delete= models.CASCADE,related_name='flags',blank=True,null=True)
+    reportReason = models.TextField()
+    dateReported = models.DateTimeField(auto_now=False, auto_now_add=True)
+    class Meta:
+        ordering =['dateReported']

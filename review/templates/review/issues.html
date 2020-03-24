@@ -1,0 +1,65 @@
+{% extends "users/base.html" %}
+{% load humanize %}
+
+{% block title %}
+<title>Rating Portal - Issues</title>
+{% endblock title %}
+{% block content %}
+<div class="card-header">
+
+    <h2>Issues</h2>
+</div>
+<div class="card-body border border-secondary">
+    {% for review in reviewList %}
+    <div class="card mt-4 border border-primary">
+        <div class="card-header">
+            <h6>
+                {{review.author.username}}
+            </h6>
+        </div>
+        <div class="card-body">
+            <h6>Review</h6>
+            <hr>
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between">
+                        <a class="card-link text-dark" href="{%url 'course' courseName=review.courseName%}">
+                            <h6>{{review.courseName}}</h6>
+                        </a>
+                        <h6 class="text-muted">{{review.dateAdded|naturaltime}}</h6>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <span class="text-secondary">
+                            {{review.score}}
+                        </span>
+                        <p class="ml-5">
+                            {{review.reviewContent}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <h6>Issues</h6>
+            <hr>
+            {% for report in review.flags.all %}
+            <div class="card mt-2">
+                <div class="card-header">
+                    {{report.dateReported|naturaltime}}
+                </div>
+                <div class="card-body">
+                    <p class="ml-5">
+                        {{report.reportReason}}
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="card-link">Take Action</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

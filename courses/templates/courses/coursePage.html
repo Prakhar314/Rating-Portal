@@ -32,11 +32,16 @@ Rating Portal - Course
             </div>
         </div>
         <div class="card-footer text-right">
-            {% if user.get_username == review.author.username %}
+            {% if user.is_superuser %}
             <a class="card-link text-black-50" href="{% url 'delete' reviewID=review.id type='from_course'%}">Delete</a>
             {% else %}
-            <a class="card-link text-black-50" href="#">Report</a>
+            {% if user.get_username == review.author.username%}
+            <a class="card-link text-black-50" href="{% url 'delete' reviewID=review.id type='from_course'%}">Delete</a>
+            {% else %}
+            <a class="card-link text-black-50" href="{% url 'report' reviewID=review.id%}">Report</a>
             {% endif %}
+            {% endif %}
+
 
         </div>
     </div>

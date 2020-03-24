@@ -3,6 +3,8 @@ from django.contrib import messages
 from django.apps import apps
 from django.http import Http404
 from review.forms import CommentForm
+from courses.models import Course
+from review.models import Review
 
 def courseView(request,courseName):
     reviews,rating = recheckRatingsFor(courseName)
@@ -62,6 +64,7 @@ def recheckAllRatings():
         course.save()
 
 def getAllOf(name):
-    for r in apps.get_app_config(name).get_models():
-        objects = list(r.objects.all())
-    return objects
+    if name == 'review':
+        return Review.objects.all()
+    elif name=='courses':
+        return Course.objects.all()

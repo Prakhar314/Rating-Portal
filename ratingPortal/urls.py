@@ -30,5 +30,7 @@ urlpatterns = [
     path('change-pass/',user_views.changePassword,name='change-pass'),
     path('course/<str:courseName>/',courseViews.courseView,name='course'),
     path('course/',courseViews.courseListView,name='courseList'),
-    path('delete/<int:reviewID>/<str:type>/',reviewViews.deleteReview,name='delete')
+    path('issues/',reviewViews.issueView,name='issues'),
+    path('delete/<int:reviewID>/<str:type>/',reviewViews.deleteReview,name='delete'),
+    path('report/<int:reviewID>/',reviewViews.reportFormView,name='report'),
 ]

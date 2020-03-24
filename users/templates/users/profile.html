@@ -7,6 +7,10 @@ Rating Portal - Profile
 <div class="card-body">
     <h2>{{profileOwner.get_username}}</h2>
     <hr>
+    {% if user.is_superuser %}
+    <a class="card-link" href="{% url 'issues' %}">See recent issues</a>
+    <hr>
+    {% endif %}
     {% if user.get_username == profileOwner.get_username %}
     <a class="card-link" href="{% url 'change-pass' %}">Change Password</a>
     <hr>
@@ -38,10 +42,14 @@ Rating Portal - Profile
             </div>
         </div>
         <div class="card-footer text-right">
-            {% if user.get_username == review.author.username %}
-            <a class="card-link text-black-50" href="{% url 'delete' reviewID=review.id type='from_profile'%}">Delete</a>
+            {% if user.is_superuser %}
+            <a class="card-link text-black-50" href="{% url 'delete' reviewID=review.id type='from_course'%}">Delete</a>
             {% else %}
-            <a class="card-link text-black-50" href="#">Report</a>
+            {% if user.get_username == review.author.username%}
+            <a class="card-link text-black-50" href="{% url 'delete' reviewID=review.id type='from_course'%}">Delete</a>
+            {% else %}
+            <a class="card-link text-black-50" href="{% url 'report' reviewID=review.id%}">Report</a>
+            {% endif %}
             {% endif %}
         </div>
     </div>
