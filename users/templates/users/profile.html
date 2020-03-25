@@ -43,12 +43,15 @@ Rating Portal - Profile
         </div>
         <div class="card-footer text-right">
             {% if user.is_superuser %}
-            <a class="card-link text-black-50" href="{% url 'delete' reviewID=review.id %}?next={{request.path}}">Delete</a>
+            <a class="card-link text-black-50"
+                href="{% url 'delete' reviewID=review.id %}?next={{request.path}}">Delete</a>
             {% else %}
             {% if user.get_username == review.author.username%}
-            <a class="card-link text-black-50" href="{% url 'delete' reviewID=review.id %}?next={{request.path}}">Delete</a>
+            <a class="card-link text-black-50"
+                href="{% url 'delete' reviewID=review.id %}?next={{request.path}}">Delete</a>
             {% else %}
-            <a class="card-link text-black-50" href="{% url 'report' reviewID=review.id%}?next={{request.path}}">Report</a>
+            <a class="card-link text-black-50"
+                href="{% url 'report' reviewID=review.id%}?next={{request.path}}">Report</a>
             {% endif %}
             {% endif %}
         </div>
@@ -60,3 +63,38 @@ Rating Portal - Profile
 </div>
 
 {% endblock content %}
+
+{% block sidebar %}
+<div class="col-md-4 mt-2">
+    <div class="card">
+        <div class="card-header">
+            <h3>
+                Recent
+            </h3>
+        </div>
+        {% for recent in profileOwner.recentActions.all %}
+            {% if recent.actionType == 'i' %}
+            <div class="m-1 alert alert-info ">
+                {% if recent.actionLink %}
+                <a href="{{recent.actionLink}}" class="card-link text-info">
+                {%else%}
+                <a class="text-info">
+                {% endif %}
+            {%else%}
+            <div class="m-1 alert alert-danger">
+                {% if recent.actionLink %}
+                <a href="{{recent.actionLink}}" class="card-link text-danger">
+                {%else%}
+                <a class="text-danger">
+                {% endif %}
+            {% endif %}
+                    <div class="d-flex justify-content-between">
+                        <small>{{recent.actionDetail}}</small>
+                        <small>{{recent.dateAdded|naturaltime}}</small>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endblock sidebar %}

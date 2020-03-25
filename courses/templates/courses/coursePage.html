@@ -34,12 +34,15 @@ Rating Portal - Course
         </div>
         <div class="card-footer text-right">
             {% if user.is_superuser %}
-            <a class="card-link text-black-50" href="{% url 'delete' reviewID=review.id %}?next={{request.path}}">Delete</a>
+            <a class="card-link text-black-50"
+                href="{% url 'delete' reviewID=review.id %}?next={{request.path}}">Delete</a>
             {% else %}
             {% if user.get_username == review.author.username%}
-            <a class="card-link text-black-50" href="{% url 'delete' reviewID=review.id %}?next={{request.path}}">Delete</a>
+            <a class="card-link text-black-50"
+                href="{% url 'delete' reviewID=review.id %}?next={{request.path}}">Delete</a>
             {% else %}
-            <a class="card-link text-black-50" href="{% url 'report' reviewID=review.id%}?next={{request.path}}">Report</a>
+            <a class="card-link text-black-50"
+                href="{% url 'report' reviewID=review.id%}?next={{request.path}}">Report</a>
             {% endif %}
             {% endif %}
 

@@ -32,6 +32,11 @@ Rating Portal - User Ban
     </div>
     <hr>
     <form method="post">
+        {% if alreadyBanned %}
+        <div class="alert alert-warning" role="alert">
+            This user is already banned till {{alreadyBanned|naturaltime}}
+        </div>
+        {% endif %}
         {% csrf_token %}
         {{form|crispy}}
         <button type="submit" class="btn btn-error">Submit</button>
