@@ -1,0 +1,40 @@
+{% extends "users/base.html" %}
+{% load humanize %}
+{% block title %}
+Rating Portal - Report
+{% endblock title %}
+{% block content %}
+<div class="card-body">
+    <h2>
+        What do you want to do?
+    </h2>
+    <hr>
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between">
+                <h6>
+                    {{review.author.username}}
+                </h6>
+                <h6>
+                    {{review.courseName}}
+                </h6>
+                <h6>
+                    {{review.dateAdded|naturaltime}}
+                </h6>
+            </div>
+        </div>
+        <div class="card-body">
+            <p>
+                {{review.reviewContent}}
+            </p>
+        </div>
+    </div>
+</div>
+<div class="card-footer">
+    <div class="d-flex justify-content-between">
+        <a href="{% url 'ignore' reviewID=review.id %}?next=reportAction{{request.path}}" class="card-link">Ignore</a>
+        <a href="{% url 'delete' reviewID=review.id %}?next=reportAction{{request.path}}" class="card-link">Delete and Warn</a>
+        <a href="{% url 'ban' reviewID=review.id userID=review.author.id%}?next={{request.path}}" class="card-link">Ban User</a>
+    </div>
+</div>
+{% endblock content %}

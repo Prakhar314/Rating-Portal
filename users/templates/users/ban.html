@@ -1,0 +1,42 @@
+{% extends "users/base.html" %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+
+{% block title %}
+Rating Portal - User Ban
+{% endblock title %}
+
+{% block content %}
+<div class="card-body">
+    <h3>Ban</h3>
+    <hr>
+    <div class="card m-2">
+        <div class="card-header">
+            <div class="d-flex justify-content-between">
+                <h6>
+                    {{review.author.username}}
+                </h6>
+                <h6>
+                    {{review.courseName}}
+                </h6>
+                <h6>
+                    {{review.dateAdded|naturaltime}}
+                </h6>
+            </div>
+        </div>
+        <div class="card-body">
+            <p>
+                {{review.reviewContent}}
+            </p>
+        </div>
+    </div>
+    <hr>
+    <form method="post">
+        {% csrf_token %}
+        {{form|crispy}}
+        <button type="submit" class="btn btn-error">Submit</button>
+        <a href="{{next}}" class="btn btn-success">Cancel</a>
+        <h6></h6>
+    </form>
+</div>
+{% endblock content %}

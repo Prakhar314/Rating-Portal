@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'django.contrib.humanize',
+    'crispy_forms',
     "users",
     "courses",
     "review",
@@ -119,3 +120,4 @@ STATIC_URL = "/static/"
 
 LOGIN_REDIRECT_URL = "home"
 LOGIN_URL = "login"
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

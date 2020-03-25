@@ -45,7 +45,7 @@
             <hr>
             {% for report in review.flags.all %}
             <div class="card mt-2">
-                <div class="card-header">
+                <div class="card-header text-right text-muted">
                     {{report.dateReported|naturaltime}}
                 </div>
                 <div class="card-body">
@@ -53,13 +53,15 @@
                         {{report.reportReason}}
                     </p>
                 </div>
-                <div class="card-footer">
-                    <a href="#" class="card-link">Take Action</a>
-                </div>
             </div>
             {% endfor %}
         </div>
+        <div class="card-footer">
+            <a href="{%url 'reportAction' review.id%}" class="card-link">Take Action</a>
+        </div>
     </div>
+    {% empty %}
+    <h4>No issues</h4>
     {% endfor %}
 </div>
 {% endblock content %}

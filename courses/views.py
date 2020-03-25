@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.apps import apps
 from django.http import Http404
+
 from review.forms import CommentForm
 from courses.models import Course
 from review.models import Review
@@ -15,16 +16,16 @@ def courseView(request,courseName):
 
     new_comment = None
     if request.method == 'POST':
-        comment_form = CommentForm(data=request.POST)
+        comment_form = CommentForm(data = request.POST,initial={'author':request.user})
         if comment_form.is_valid():
-            new_comment = comment_form.save(commit=True)
+            new_comment = comment_form.save(commit=False)
             new_comment.author = request.user
             new_comment.courseName=courseName
             new_comment.save()
             messages.success(request,'Review submitted')
             return redirect('course',courseName=courseName)
     else:
-        comment_form = CommentForm()
+        comment_form = CommentForm(initial={'author':request.user})
 
     return render(request,'courses/coursePage.html',{'reviews':reviews,'courseName':courseName,'rating':rating,'commentForm':comment_form})
 

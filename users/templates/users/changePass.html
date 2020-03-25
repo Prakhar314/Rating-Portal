@@ -1,4 +1,5 @@
 {% extends "users/base.html" %}
+{% load crispy_forms_tags %}
 {% block title %}
 Rating Portal - Change Password
 {% endblock title %}
@@ -8,7 +9,7 @@ Rating Portal - Change Password
             {% csrf_token %}
             <fieldset class='form-group'>
                 <legend class="border-bottom mb-4"><h3>Change Password</h3></legend>
-                {{ form.as_p }}
+                {{ form|crispy}}
             </fieldset>
             <div class="form-group">
                 <button class="btn btn-outline-primary" type="submit">Submit</button>

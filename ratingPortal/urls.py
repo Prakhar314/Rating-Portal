@@ -24,16 +24,34 @@ from users.forms import PickyAuthenticationForm
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('register/',user_views.register, name='register'),
-    path('login/',auth_views.LoginView.as_view(template_name='users/login.html',authentication_form=PickyAuthenticationForm), name='login'),
-    path('logout/',auth_views.LogoutView.as_view(template_name='users/logout.html'),name='logout'),
-    path('',user_views.homeView,name='home'),
-    path('profile/<str:profileOwner>/',user_views.profile,name='profile'),
-    path('change-pass/',user_views.changePassword,name='change-pass'),
-    path('course/<str:courseName>/',courseViews.courseView,name='course'),
-    path('course/',courseViews.courseListView,name='courseList'),
-    path('issues/',reviewViews.issueView,name='issues'),
-    path('delete/<int:reviewID>/<str:type>/',reviewViews.deleteReview,name='delete'),
-    path('report/<int:reviewID>/',reviewViews.reportFormView,name='report'),
+    path("admin/", admin.site.urls),
+    path("register/", user_views.register, name="register"),
+    path(
+        "login/",
+        auth_views.LoginView.as_view(
+            template_name="users/login.html",
+            authentication_form=PickyAuthenticationForm,
+        ),
+        name="login",
+    ),
+    path(
+        "logout/",
+        auth_views.LogoutView.as_view(template_name="users/logout.html"),
+        name="logout",
+    ),
+    path("", user_views.homeView, name="home"),
+    path("profile/<str:profileOwner>/", user_views.profile, name="profile"),
+    path("change-pass/", user_views.changePassword, name="change-pass"),
+    path("course/<str:courseName>/", courseViews.courseView, name="course"),
+    path("course/", courseViews.courseListView, name="courseList"),
+    path("issues/", reviewViews.issueView, name="issues"),
+    path("delete/<int:reviewID>/", reviewViews.deleteReview, name="delete"),
+    path("report/<int:reviewID>/", reviewViews.reportFormView, name="report"),
+    path("ignore/<int:reviewID>/", reviewViews.ignoreReports, name="ignore"),
+    path(
+        "reportAction/<int:reviewID>/",
+        reviewViews.adminReportAction,
+        name="reportAction",
+    ),
+    path("ban/<int:userID>/<int:reviewID>/", user_views.banView, name="ban"),
 ]
