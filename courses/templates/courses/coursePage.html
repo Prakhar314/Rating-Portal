@@ -41,8 +41,12 @@ Rating Portal - Course
             <a class="card-link text-black-50"
                 href="{% url 'delete' reviewID=review.id %}?next={{request.path}}">Delete</a>
             {% else %}
+            {% if user.get_username in review.flaggers %}
+            <a class="card-link text-black-50"">Reported</a>
+            {%else%}
             <a class="card-link text-black-50"
                 href="{% url 'report' reviewID=review.id%}?next={{request.path}}">Report</a>
+            {% endif %}
             {% endif %}
             {% endif %}
 

@@ -50,8 +50,12 @@ Rating Portal - Profile
             <a class="card-link text-black-50"
                 href="{% url 'delete' reviewID=review.id %}?next={{request.path}}">Delete</a>
             {% else %}
+            {% if user.get_username in review.flaggers %}
+            <a class="card-link text-black-50"">Reported</a>
+            {%else%}
             <a class="card-link text-black-50"
                 href="{% url 'report' reviewID=review.id%}?next={{request.path}}">Report</a>
+            {% endif %}
             {% endif %}
             {% endif %}
         </div>
@@ -64,7 +68,9 @@ Rating Portal - Profile
 
 {% endblock content %}
 
+
 {% block sidebar %}
+{% if user.is_superuser or user.get_username == profileOwner.get_username %}
 <div class="col-md-4 mt-2">
     <div class="card">
         <div class="card-header">
@@ -97,4 +103,6 @@ Rating Portal - Profile
             {% endfor %}
         </div>
     </div>
+  
+    {% endif %}
     {% endblock sidebar %}

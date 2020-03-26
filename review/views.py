@@ -87,12 +87,15 @@ def ignoreReports(request, reviewID):
 @login_required
 def reportFormView(request, reviewID):
     review = Review.objects.get(id=reviewID)
+    if request.user.username in review.flaggers():
+        return Http404
     next = request.build_absolute_uri(request.GET["next"])
     if request.method == "POST":
         form = ReportForm(request.POST)
         if form.is_valid():
             report = form.save(commit=True)
             report.reviewReported = review
+            report.reporter = request.user.username
             report.save()
 
             actionDetail=f'You made a report against {review.author.username}\'s review'

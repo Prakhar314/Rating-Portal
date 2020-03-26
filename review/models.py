@@ -9,10 +9,18 @@ class Review(models.Model):
     class Meta:
         ordering =['-dateAdded']
 
+    def flaggers(self):
+        return [u.reporter for u in self.flags.all()]
+    def getTotalLikes(self):
+        return self.likes.users.count()
+    def getTotalDislikes(self):
+        return self.dislikes.users.count()
+
 class Report(models.Model):
     reviewReported = models.ForeignKey(Review, on_delete= models.CASCADE,related_name='flags',blank=True,null=True)
     reportReason = models.TextField()
     dateReported = models.DateTimeField(auto_now=False, auto_now_add=True)
+    reporter = models.TextField(default='')
     class Meta:
         ordering =['dateReported']
 
@@ -35,3 +43,15 @@ class RecentAction(models.Model):
     def create(cls, user,actionDetail,actionType,actionLink=None):
         action = cls(user=user,actionDetail=actionDetail,actionLink=actionLink,actionType=actionType)
         return action
+
+class Like(models.Model):
+
+    review = models.OneToOneField(Review, related_name="likes", on_delete=models.CASCADE)
+    users = models.ManyToManyField(User, related_name='reviewLikes')
+    dateAdded = models.DateTimeField(auto_now_add=True)
+
+class DisLike(models.Model):
+
+    review = models.OneToOneField(Review, related_name="dislikes", on_delete=models.CASCADE)
+    users = models.ManyToManyField(User, related_name='reviewDislikes')
+    dateAdded = models.DateTimeField(auto_now_add=True)
