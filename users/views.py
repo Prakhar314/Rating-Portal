@@ -32,11 +32,65 @@ def homeView(request):
 
 @login_required
 def profile(request, profileOwner):
+    profileOwner=User.objects.get(username=profileOwner)
     # print(type())
+    if request.method == "POST":
+        postValues=dict(request.POST).values()
+        if ['Like'] in postValues or['Liked'] in postValues:
+            for key, value in dict(request.POST).items(): 
+                if ['Like'] == value or ['Liked'] == value: 
+                    break
+            review = Review.objects.get(id=int(key.split('-')[1]))
+            actionLink=request.build_absolute_uri(f'/profile/{review.author.username}')
+            reviewAuthor=review.author.username
+            if review.isAnonymous and not request.user.is_superuser:
+                actionLink=None
+                reviewAuthor='Anonymous'
+            try:
+                review.likes
+            except Review.likes.RelatedObjectDoesNotExist as identifier:
+                Like.objects.create(review=review)
+            try:
+                review.dislikes
+            except Review.dislikes.RelatedObjectDoesNotExist as identifier:
+                Dislike.objects.create(review=review)
+            if request.user not in review.likes.users.all():
+                review.likes.users.add(request.user)
+                RecentAction.create(request.user,f'You liked {reviewAuthor}\'s review','i',actionLink).save()
+                if request.user in review.dislikes.users.all():
+                    review.dislikes.users.remove(request.user)
+            else:
+                RecentAction.create(request.user,f'You removed your like from {reviewAuthor}\'s review','i',actionLink).save()
+                review.likes.users.remove(request.user)
+                #print('like',list(review.likes.users.all()))
+                #print('dislike',list(review.dislikes.users.all()))
+        elif  ['Dislike'] in postValues or ['Disliked'] in postValues:
+            for key, value in dict(request.POST).items(): 
+                if ['Dislike'] == value or ['Disliked'] == value: 
+                    break
+            review = Review.objects.get(id=int(key.split('-')[1]))
+            try:
+                review.likes
+            except Review.likes.RelatedObjectDoesNotExist as identifier:
+                Like.objects.create(review=review)
+            try:
+                review.dislikes
+            except Review.dislikes.RelatedObjectDoesNotExist as identifier:
+                Dislike.objects.create(review=review)
+            if request.user not in review.dislikes.users.all():
+                RecentAction.create(request.user,f'You disliked {reviewAuthor}\'s review','i',actionLink).save()
+                review.dislikes.users.add(request.user)
+                if request.user in review.likes.users.all():
+                    review.likes.users.remove(request.user)
+            else:
+                RecentAction.create(request.user,f'You removed your dislike from {reviewAuthor}\'s review','i',actionLink).save()
+                review.dislikes.users.remove(request.user)
+                #print('like',list(review.likes.users.all()))
+                #print('dislike',list(review.dislikes.users.all()))
     return render(
         request,
         "users/profile.html",
-        {"profileOwner": User.objects.get(username=profileOwner)},
+        {"profileOwner": profileOwner,'currentView':'profile','profileScore':profileOwner.customusermodel.getTotalScore()},
     )
 
 

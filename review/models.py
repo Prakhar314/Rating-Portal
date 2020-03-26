@@ -6,6 +6,7 @@ class Review(models.Model):
     courseName = models.CharField(max_length=120)
     dateAdded = models.DateTimeField(auto_now=False, auto_now_add=True)
     author = models.ForeignKey(User, on_delete= models.CASCADE,related_name='reviews_written')
+    isAnonymous = models.BooleanField(default=False)
     class Meta:
         ordering =['-dateAdded']
 
@@ -50,8 +51,10 @@ class Like(models.Model):
     users = models.ManyToManyField(User, related_name='reviewLikes')
     dateAdded = models.DateTimeField(auto_now_add=True)
 
-class DisLike(models.Model):
+
+class Dislike(models.Model):
 
     review = models.OneToOneField(Review, related_name="dislikes", on_delete=models.CASCADE)
     users = models.ManyToManyField(User, related_name='reviewDislikes')
     dateAdded = models.DateTimeField(auto_now_add=True)
+

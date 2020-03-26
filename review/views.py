@@ -99,8 +99,12 @@ def reportFormView(request, reviewID):
             report.save()
 
             actionDetail=f'You made a report against {review.author.username}\'s review'
+            actionLink = request.build_absolute_uri(f'/profile/{review.author.username}')
+            if review.isAnonymous and not request.user.is_superuser:
+                actionDetail=f'You made a report against an Anonymous user\'s review'
+                actionLink=None
             actionType='i'
-            rc= RecentAction.create(request.user,actionDetail,actionType,request.build_absolute_uri(f'/profile/{review.author.username}') )
+            rc= RecentAction.create(request.user,actionDetail,actionType, actionLink)
             rc.save()
 
             messages.success(request, "Review Reported")

@@ -21,6 +21,12 @@ class UserRegistrationForm(UserCreationForm):
             raise forms.ValidationError("Use a valid IIT-D email")
         return email
 
+    def clean_username(self, *args, **kwargs):
+        username = self.cleaned_data.get("username")
+        if username == 'Anonymous':
+            raise forms.ValidationError("Username not allowed")
+        return username
+
 
 class PickyAuthenticationForm(AuthenticationForm):
     def confirm_login_allowed(self, user):

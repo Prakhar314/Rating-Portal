@@ -5,7 +5,7 @@ from django.http import Http404
 
 from review.forms import CommentForm
 from courses.models import Course
-from review.models import Review
+from review.models import Review,Like,Dislike,RecentAction
 
 
 def courseView(request, courseName):
@@ -16,17 +16,46 @@ def courseView(request, courseName):
         raise Http404("No such Course")
 
     new_comment = None
+    comment_form = CommentForm(initial={"author": request.user})
     if request.method == "POST":
-        comment_form = CommentForm(data=request.POST, initial={"author": request.user})
-        if comment_form.is_valid():
-            new_comment = comment_form.save(commit=False)
-            new_comment.author = request.user
-            new_comment.courseName = courseName
-            new_comment.save()
-            messages.success(request, "Review submitted")
-            return redirect("course", courseName=courseName)
-    else:
-        comment_form = CommentForm(initial={"author": request.user})
+        postValues=dict(request.POST).values()
+        if ['Like'] in postValues or['Liked'] in postValues:
+            for key, value in dict(request.POST).items(): 
+                if ['Like'] == value or ['Liked'] == value: 
+                    break
+            review = Review.objects.get(id=int(key.split('-')[1]))
+            actionLink=request.build_absolute_uri(f'/profile/{review.author.username}')
+            reviewAuthor=review.author.username
+            if review.isAnonymous and not request.user.is_superuser:
+                actionLink=None
+                reviewAuthor='Anonymous'
+            try:
+                review.likes
+            except Review.likes.RelatedObjectDoesNotExist as identifier:
+                Like.objects.create(review=review)
+            try:
+                review.dislikes
+            except Review.dislikes.RelatedObjectDoesNotExist as identifier:
+                Dislike.objects.create(review=review)
+            if request.user not in review.likes.users.all():
+                review.likes.users.add(request.user)
+                RecentAction.create(request.user,f'You liked {reviewAuthor}\'s review','i',actionLink).save()
+                if request.user in review.dislikes.users.all():
+                    review.dislikes.users.remove(request.user)
+            else:
+                RecentAction.create(request.user,f'You removed your like from {reviewAuthor}\'s review','i',actionLink).save()
+                review.likes.users.remove(request.user)
+                #print('like',list(review.likes.users.all()))
+                #print('dislike',list(review.dislikes.users.all()))
+        else:
+            comment_form = CommentForm(data=request.POST, initial={"author": request.user})
+            if comment_form.is_valid():
+                new_comment = comment_form.save(commit=False)
+                new_comment.author = request.user
+                new_comment.courseName = courseName
+                new_comment.save()
+                messages.success(request, "Review submitted")
+                return redirect("course", courseName=courseName)
 
     return render(
         request,
@@ -36,6 +65,7 @@ def courseView(request, courseName):
             "courseName": courseName,
             "rating": rating,
             "commentForm": comment_form,
+            'currentView':'course',
         },
     )
 

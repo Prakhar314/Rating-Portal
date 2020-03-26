@@ -1,0 +1,81 @@
+{% load humanize %}
+{% load customFilters %}
+{% if currentView == 'profile' and review.isAnonymous and review.author != request.user and not request.user.is_superuser %}
+{%else%}
+<div class="card m-1 mt-3">
+    <div class="card-header">
+        <div class="d-flex justify-content-between">
+            {% if currentView == 'profile' %}
+            <a class="card-link text-dark" href="{%url 'course' courseName=review.courseName%}">
+                <h6>{{review.courseName}}</h6>
+            </a>
+            {%else%}
+            {% if review.isAnonymous %}
+              {% if review.author == request.user or request.user.is_superuser %}
+                <a class="card-link text-dark" href="{%url 'profile' profileOwner=review.author.username%}">
+                    <h6>{{review.author.username}}</h6>
+                </a>
+              {%else%}
+                <a class="card-link text-dark"">
+                    <h6>Anonymous</h6>
+                </a>
+              {% endif %}
+            {%else%}
+            <a class="card-link text-dark" href="{%url 'profile' profileOwner=review.author.username%}">
+                <h6>{{review.author.username}}</h6>
+            </a>
+            {% endif %}
+            {% endif %}
+
+            <h6 class="text-muted">{{review.dateAdded|naturaltime}}</h6>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+            <span class="text-secondary">
+                {{review.score}}
+            </span>
+            <p class="ml-5">
+                {{review.reviewContent}}
+            </p>
+        </div>
+    </div>
+    <div class="card-footer text-right ">
+        <div class="d-flex justify-content-between">
+            <form method="post" class="form-inline">
+                {% csrf_token %}
+                <h6 class="text-weight-bold mt-2 p-1">
+                    {{review.likes.users.count|subtract:review.dislikes.users.count}}
+                </h6>
+                {% if request.user in review.likes.users.all %}
+                <button type="submit" formmethod="POST" name="like-{{review.id}}" class="btn text-danger p-1" value="Liked"><i class="fa fa-arrow-up"></i>
+                </button>
+                {%else%}
+                <button type="submit" formmethod="POST" name="like-{{review.id}}" class="btn p-1" value="Like"><i class="fa fa-arrow-up"></i></button>
+                {% endif %}
+                {% if request.user in review.dislikes.users.all %}
+                <button type="submit" formmethod="POST" name="dislike-{{review.id}}" class="btn text-primary p-1" value="Disliked"><i class="fa fa-arrow-down"></i></button>
+                {%else%}
+                <button type="submit" formmethod="POST" name="dislike-{{review.id}}" class="btn p-1" value="Dislike"><i class="fa fa-arrow-down"></i></button>
+                {% endif %}
+            </form>
+            {% if user.is_superuser %}
+            <a class="card-link text-black-50 mt-2"
+                href="{% url 'delete' reviewID=review.id %}?next={{request.path}}">Delete</a>
+            {% else %}
+            {% if user.get_username == review.author.username%}
+            <a class="card-link text-black-50 mt-2"
+                href="{% url 'delete' reviewID=review.id %}?next={{request.path}}">Delete</a>
+            {% else %}
+            {% if user.get_username in review.flaggers %}
+            <a class="card-link text-black-50 mt-2">Reported</a>
+            {%else%}
+            <a class=" card-link text-black-50 mt-2"
+                href="{% url 'report' reviewID=review.id%}?next={{request.path}}">Report</a>
+            {% endif %}
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}

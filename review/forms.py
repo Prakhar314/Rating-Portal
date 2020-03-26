@@ -5,7 +5,7 @@ from django import forms
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ("score", "reviewContent")
+        fields = ("score", "reviewContent","isAnonymous")
 
     def clean_score(self, *args, **kwargs):
         score = self.cleaned_data.get("score")
