@@ -13,10 +13,17 @@ class UserRegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ["username", "email", "password1", "password2"]
+        fields = ["first_name","last_name","username", "email", "password1", "password2"]
 
     def clean_email(self, *args, **kwargs):
         email = self.cleaned_data.get("email")
+        emailPre = email.split('@')[0]
+        for alreadyPre in [u.email.split('@')[0] for u in User.objects.all()]:
+            if (emailPre.startswith(alreadyPre) or alreadyPre.startswith(emailPre)) and alreadyPre!='' and emailPre!='' :
+                print(emailPre,alreadyPre)
+                raise forms.ValidationError("Email already in use")
+        if emailPre=='':
+            raise forms.ValidationError("Use a valid IIT-D email")
         if not email.endswith("iitd.ac.in"):
             raise forms.ValidationError("Use a valid IIT-D email")
         return email

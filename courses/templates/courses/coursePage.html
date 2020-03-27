@@ -11,7 +11,9 @@ Rating Portal - Course
         <h2>{{courseName}} - Reviews</h2>
         <h2 class="text-muted">{{reviews|length}}</h2>
     </div>
-    <hr class="hr-primary">
+    <hr>
+    <p class="card-text">{{courseDescription}}</p>
+    <hr>
     {% for review in reviews %}
     {% include "review/review.html" %}
 

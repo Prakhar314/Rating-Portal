@@ -1,9 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
+
+from courses.models import Course
+
 class Review(models.Model):
     score = models.DecimalField(decimal_places=2,max_digits=4)
     reviewContent = models.TextField()
     courseName = models.CharField(max_length=120)
+    courseID = models.IntegerField()
     dateAdded = models.DateTimeField(auto_now=False, auto_now_add=True)
     author = models.ForeignKey(User, on_delete= models.CASCADE,related_name='reviews_written')
     isAnonymous = models.BooleanField(default=False)
@@ -16,6 +20,12 @@ class Review(models.Model):
         return self.likes.users.count()
     def getTotalDislikes(self):
         return self.dislikes.users.count()
+    def getPageType(self):
+        pageType = Course.objects.get(id=self.courseID).pageType
+        if pageType=='p':
+            return 'professor'
+        elif pageType=='c':
+            return 'course'
 
 class Report(models.Model):
     reviewReported = models.ForeignKey(Review, on_delete= models.CASCADE,related_name='flags',blank=True,null=True)

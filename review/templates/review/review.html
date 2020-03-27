@@ -6,14 +6,15 @@
     <div class="card-header">
         <div class="d-flex justify-content-between">
             {% if currentView == 'profile' %}
-            <a class="card-link text-dark" href="{%url 'course' courseName=review.courseName%}">
+            <a class="card-link text-dark" href="{%url review.getPageType review.courseID%}">
                 <h6>{{review.courseName}}</h6>
             </a>
             {%else%}
             {% if review.isAnonymous %}
               {% if review.author == request.user or request.user.is_superuser %}
                 <a class="card-link text-dark" href="{%url 'profile' profileOwner=review.author.username%}">
-                    <h6>{{review.author.username}}</h6>
+                    <h6>{{review.author.first_name}} {{review.author.last_name}}</h6>
+                    <small class="text-muted">{{review.author.username}}</small>
                 </a>
               {%else%}
                 <a class="card-link text-dark"">
@@ -22,7 +23,8 @@
               {% endif %}
             {%else%}
             <a class="card-link text-dark" href="{%url 'profile' profileOwner=review.author.username%}">
-                <h6>{{review.author.username}}</h6>
+                <h6>{{review.author.first_name}} {{review.author.last_name}} <small class="text-muted">{{review.author.username}}</small></h6>
+                
             </a>
             {% endif %}
             {% endif %}
@@ -47,6 +49,7 @@
                 <h6 class="text-weight-bold mt-2 p-1">
                     {{review.likes.users.count|subtract:review.dislikes.users.count}}
                 </h6>
+                {% if user.is_authenticated %}
                 {% if request.user in review.likes.users.all %}
                 <button type="submit" formmethod="POST" name="like-{{review.id}}" class="btn text-danger p-1" value="Liked"><i class="fa fa-arrow-up"></i>
                 </button>
@@ -57,6 +60,8 @@
                 <button type="submit" formmethod="POST" name="dislike-{{review.id}}" class="btn text-primary p-1" value="Disliked"><i class="fa fa-arrow-down"></i></button>
                 {%else%}
                 <button type="submit" formmethod="POST" name="dislike-{{review.id}}" class="btn p-1" value="Dislike"><i class="fa fa-arrow-down"></i></button>
+                {% endif %}
+                  
                 {% endif %}
             </form>
             {% if user.is_superuser %}

@@ -69,6 +69,11 @@ def profile(request, profileOwner):
                 if ['Dislike'] == value or ['Disliked'] == value: 
                     break
             review = Review.objects.get(id=int(key.split('-')[1]))
+            actionLink=request.build_absolute_uri(f'/profile/{review.author.username}')
+            reviewAuthor=review.author.username
+            if review.isAnonymous and not request.user.is_superuser:
+                actionLink=None
+                reviewAuthor='Anonymous'
             try:
                 review.likes
             except Review.likes.RelatedObjectDoesNotExist as identifier:

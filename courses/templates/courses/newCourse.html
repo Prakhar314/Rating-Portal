@@ -1,0 +1,21 @@
+{% extends "users/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  Rating Portal - New Page
+{% endblock title %}
+
+{% block content %}
+  <div class="card-body">
+      <h3>
+          New Page
+      </h3>
+      <hr>
+      <form method="post">
+          {% csrf_token %}
+          {{form|crispy}}
+          <button type="submit" class="btn btn-outline-primary">Submit</button>
+          <a href="{%url 'profile' request.user.username%}""  class="btn btn-outline-primary" >Cancel</a>
+      </form>
+  </div>
+{% endblock content %}

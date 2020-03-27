@@ -23,7 +23,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
-                        <a class="card-link text-dark" href="{%url 'course' courseName=review.courseName%}">
+                        <a class="card-link text-dark" href="{%url review.getPageType review.courseID%}">
                             <h6>{{review.courseName}}</h6>
                         </a>
                         <h6 class="text-muted">{{review.dateAdded|naturaltime}}</h6>

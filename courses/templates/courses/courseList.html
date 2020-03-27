@@ -6,11 +6,20 @@
   <div class="card-body">
       <h2>All Courses</h2>
       <hr>
+      <form method="GET" class="navbar-form" role="search">
+        <div class="input-group add-on">
+          <input class="form-control" placeholder="Search" name="q" id="id_q" type="text">
+          <div class="input-group-btn ml-1">
+            <button class="btn btn-default bg-warning" type="submit"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+      <hr>
       {% for course in list %}
         <div class="card m-1">
             <div class="card-header">
                 <div class="d-flex justify-content-between">
-                    <a class = "card-link" href="{{course.courseName}}">
+                    <a class = "card-link" href="{{course.id}}">
                         {{course.courseName}}
                     </a>
                     <h6>

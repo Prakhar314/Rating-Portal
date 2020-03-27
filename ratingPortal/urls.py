@@ -42,8 +42,10 @@ urlpatterns = [
     path("", user_views.homeView, name="home"),
     path("profile/<str:profileOwner>/", user_views.profile, name="profile"),
     path("change-pass/", user_views.changePassword, name="change-pass"),
-    path("course/<str:courseName>/", courseViews.courseView, name="course"),
-    path("course/", courseViews.courseListView, name="courseList"),
+    path("course/<int:courseID>/", courseViews.courseView, name="course"),
+    path("professor/<int:courseID>/", courseViews.courseView, name="professor"),
+    path("course/", courseViews.courseListView, name="courseList",kwargs={'pageType':'course'}),
+    path("professor/", courseViews.courseListView, name="professorList",kwargs={'pageType':'professor'}),
     path("issues/", reviewViews.issueView, name="issues"),
     path("delete/<int:reviewID>/", reviewViews.deleteReview, name="delete"),
     path("report/<int:reviewID>/", reviewViews.reportFormView, name="report"),
@@ -54,4 +56,5 @@ urlpatterns = [
         name="reportAction",
     ),
     path("ban/<int:userID>/<int:reviewID>/", user_views.banView, name="ban"),
+    path("new/",courseViews.courseFormView,name ="new"),
 ]
