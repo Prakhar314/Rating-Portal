@@ -36,8 +36,8 @@ Rating Portal -Report
             <form action="" method="post">
                 {% csrf_token %}
                 {{form|crispy}}
-                <button type="submit" class="btn btn-error">Submit</button>
-                <a href="{{next}}" class="btn btn-success">No</a></div>
+                <button type="submit" class="btn btn-outline-danger">Submit</button>
+                <a href="{{next}}" class="btn btn-outline-success">No</a></div>
             </form>
         </div>
     </div>

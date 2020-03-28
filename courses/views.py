@@ -116,7 +116,7 @@ def courseListView(request,pageType):
     allPages=getAllOf(pageType)
     #print(allPages,pageType)
     context['list'] = allPages
-
+    context['pageType'] = pageType.capitalize()
     if request.method=='GET':
         query=request.GET.get('q')
         #print(query)
