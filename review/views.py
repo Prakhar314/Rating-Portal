@@ -138,3 +138,14 @@ def adminReportAction(request, reviewID):
             "review/adminReportAction.html",
             {"review": Review.objects.get(id=reviewID)},
         )
+
+@login_required
+def viewAllReviews(request):
+    if request.user.is_superuser:
+        return render(
+            request,
+            "review/allReviews.html",
+            {"reviews": list(Review.objects.all()),'currentView':'all'},
+        )
+    else:
+        return Http404

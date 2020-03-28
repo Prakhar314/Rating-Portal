@@ -18,7 +18,7 @@ class CustomUserModel(models.Model):
                 count+=review.likes.users.count()-review.dislikes.users.count()
             except Review.likes.RelatedObjectDoesNotExist as identifier:
                 continue
-        print(self.user.username,count)
+        #print(self.user.username,count)
         return count
 
 @receiver(post_save, sender=User)

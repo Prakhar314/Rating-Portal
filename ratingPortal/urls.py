@@ -57,4 +57,6 @@ urlpatterns = [
     ),
     path("ban/<int:userID>/<int:reviewID>/", user_views.banView, name="ban"),
     path("new/",courseViews.courseFormView,name ="new"),
+    path("all/",reviewViews.viewAllReviews,name ="all"),
+    path("top/",user_views.topProfilesView,name ="top"),
 ]

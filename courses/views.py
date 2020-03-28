@@ -24,7 +24,7 @@ def courseView(request, courseID):
     comment_form = CommentForm(initial={"author": request.user})
     if request.method == "POST" and request.user.is_authenticated:
         postValues=dict(request.POST).values()
-        print(postValues)
+        #print(postValues)
         if ['Like'] in postValues or['Liked'] in postValues:
             for key, value in dict(request.POST).items(): 
                 if ['Like'] == value or ['Liked'] == value: 
@@ -114,12 +114,12 @@ def courseListView(request,pageType):
     recheckAllRatings()
     context={}
     allPages=getAllOf(pageType)
-    print(allPages,pageType)
+    #print(allPages,pageType)
     context['list'] = allPages
 
     if request.method=='GET':
         query=request.GET.get('q')
-        print(query)
+        #print(query)
         if query:
             context['list'] = getCourseFromQuery(str(query),pageType)
 
@@ -158,7 +158,7 @@ def recheckRatingsFor(courseName):
 
 
 def recheckAllRatings():
-    courseList = getAllOf("course")
+    courseList = Course.objects.all()
     reviews = getAllOf("review")
     results = {}
     for review in reviews:

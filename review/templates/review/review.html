@@ -9,21 +9,28 @@
             <a class="card-link text-dark" href="{%url review.getPageType review.courseID%}">
                 <h6>{{review.courseName}}</h6>
             </a>
-            {%else%}
+            {%endif%}
+            {% if currentView == 'all' %}
+            <a class="card-link text-dark" href="{%url review.getPageType review.courseID%}">
+                <h6>{{review.courseName}}</h6>
+            </a>
+            {%endif%}
+            {% if currentView != 'profile' %}
             {% if review.isAnonymous %}
               {% if review.author == request.user or request.user.is_superuser %}
                 <a class="card-link text-dark" href="{%url 'profile' profileOwner=review.author.username%}">
-                    <h6>{{review.author.first_name}} {{review.author.last_name}}</h6>
-                    <small class="text-muted">{{review.author.username}}</small>
+                    <h6><i class="fa fa-user"></i> {{review.author.first_name}} {{review.author.last_name}} <small class="text-muted">{{review.author.username}}</small> </h6>
+                    <i class="fa fa-bolt"></i><small class="text-muted text-primary" > {{review.author.customusermodel.getTotalScore}}</small>
                 </a>
               {%else%}
                 <a class="card-link text-dark"">
-                    <h6>Anonymous</h6>
+                    <h6><i class="fa fa-user"></i> Anonymous</h6>
                 </a>
               {% endif %}
             {%else%}
             <a class="card-link text-dark" href="{%url 'profile' profileOwner=review.author.username%}">
-                <h6>{{review.author.first_name}} {{review.author.last_name}} <small class="text-muted">{{review.author.username}}</small></h6>
+                <h6><i class="fa fa-user"></i> {{review.author.first_name}} {{review.author.last_name}} <small class="text-muted">{{review.author.username}}</small> </h6>
+                <i class="fa fa-bolt"></i><small class="text-muted text-primary" > {{review.author.customusermodel.getTotalScore}}</small>
                 
             </a>
             {% endif %}
@@ -64,21 +71,27 @@
                   
                 {% endif %}
             </form>
-            {% if user.is_superuser %}
-            <a class="card-link text-black-50 mt-2"
-                href="{% url 'delete' reviewID=review.id %}?next={{request.path}}">Delete</a>
+            {% if currentView == 'all' %}
+                {% if user.is_superuser %}
+                <a href="{%url 'reportAction' review.id%}" class="card-link text-black-50">Take Action</a>
+                {%endif%}
             {% else %}
-            {% if user.get_username == review.author.username%}
-            <a class="card-link text-black-50 mt-2"
-                href="{% url 'delete' reviewID=review.id %}?next={{request.path}}">Delete</a>
-            {% else %}
-            {% if user.get_username in review.flaggers %}
-            <a class="card-link text-black-50 mt-2">Reported</a>
-            {%else%}
-            <a class=" card-link text-black-50 mt-2"
-                href="{% url 'report' reviewID=review.id%}?next={{request.path}}">Report</a>
-            {% endif %}
-            {% endif %}
+                {% if user.is_superuser %}
+                <a class="card-link text-black-50 mt-2"
+                    href="{% url 'delete' reviewID=review.id %}?next={{request.path}}">Delete</a>
+                {% else %}
+                {% if user.get_username == review.author.username%}
+                <a class="card-link text-black-50 mt-2"
+                    href="{% url 'delete' reviewID=review.id %}?next={{request.path}}">Delete</a>
+                {% else %}
+                {% if user.get_username in review.flaggers %}
+                <a class="card-link text-black-50 mt-2">Reported</a>
+                {%else%}
+                <a class=" card-link text-black-50 mt-2"
+                    href="{% url 'report' reviewID=review.id%}?next={{request.path}}">Report</a>
+                {% endif %}
+                {% endif %}
+                {% endif %}
             {% endif %}
         </div>
     </div>

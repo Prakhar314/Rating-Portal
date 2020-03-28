@@ -8,12 +8,13 @@ Rating Portal - Profile
     <div class="d-flex justify-content-between">
         
     <h2>{{profileOwner.first_name}} {{profileOwner.last_name}} <small class="text-muted">{{profileOwner.username}}</small></h2>
-    <h2>Points: {{profileScore}}</h2>
+    <h2><i class="fa fa-bolt"></i> {{profileScore}}</h2>
     </div>
     <hr>
     {% if user.is_superuser and profileOwner.is_superuser%}
     <a class="card-link" href="{% url 'issues' %}">See recent issues</a>
     <a class="card-link" href="{% url 'new' %}">Make new page</a>
+    <a class="card-link" href="{% url 'all' %}">All Activity</a>
     <hr>
     {% endif %}
     {% if user.get_username == profileOwner.get_username %}

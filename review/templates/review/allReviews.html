@@ -1,0 +1,14 @@
+{% extends "users/base.html" %}
+{% load humanize %}
+
+{% block title %}
+    Rating Portal - All Reviews
+{% endblock title %}
+
+{% block content %}
+    <div class="card-body">
+        {% for review in reviews %}
+            {% include "review/review.html" %}
+        {% endfor %}
+    </div>
+{% endblock content %}

@@ -1,0 +1,30 @@
+{% extends "users/base.html" %}
+
+{% block title %}
+Rating Portal - Top Users
+{% endblock title %}
+
+{% block content %}
+<div class="card-body">
+    <h2>Top Profiles</h2>
+    <hr>
+    {% for user in users %}
+    <div class="card mt-2">
+        <div class="card-body">
+            <a class="card-link text-dark" href="{%url 'profile' profileOwner=user.username%}">
+                <div class="d-flex justify-content-between">
+                    <h6><i class="fa fa-user"></i> {{user.first_name}} {{user.last_name}} <small
+                        class="text-muted">{{user.username}}</small> </h6>
+                        <span>
+                            <i class="fa fa-bolt"></i><small class="text-muted text-primary">
+                            {{user.customusermodel.getTotalScore}}</small>
+
+                        </span>
+                </div>
+                
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}
